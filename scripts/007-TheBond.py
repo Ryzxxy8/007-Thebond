@@ -6,6 +6,7 @@ import time
 from IpLookup import IpLookup
 from PhoneLookup import PhoneLookup
 from EmailLookup import EmailLookup
+from Search import WebSearch
 
 
 def typewriter(text: str, delay: float = 0.001) -> None:
@@ -21,7 +22,8 @@ def list_options() -> None:
         "1. IP Lookup",
         "2. Phone Number Information",
         "3. Email Validation and Breach Check",
-        "4. Exit"
+        "4. Web Search",
+        "5. Exit"
     ]
 
     print("\n" + "=" * 20 + " OPTIONS " + "=" * 20)
@@ -53,6 +55,10 @@ def main():
                 EmailLookup(email)
 
             elif option == "4":
+                query = input("Enter search query: ").strip()
+                WebSearch(query)
+
+            elif option == "5":
                 print("Goodbye!")
                 break
 

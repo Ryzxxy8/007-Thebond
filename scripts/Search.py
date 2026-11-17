@@ -1,17 +1,32 @@
-# Imports
-from googlesearch import search
+from urllib.parse import urlencode
+
 
 class WebSearch:
-        def __init__(self, query) -> None:
-            self.query = query
-            print("Searching...")
-            self.search()
-    
-        def search(self):
-            try:
-                for i in search(self.query, tld="com", num=10, stop=10, pause=2):
-                    print(i)
-                print("\n Search Completed! \n")
-            except Exception as e:
-                print(f"Error: {e}. Unable to make a request to Google Search API.")
-        
+    def __init__(self, query: str) -> None:
+        self.query = query.strip()
+        self.search()
+
+    def search(self) -> None:
+        if not self.query:
+            print("[ERROR] Search query cannot be empty.")
+            return
+
+        if len(self.query) > 300:
+            print("[ERROR] Search query is too long (max 300 characters).")
+            return
+
+        if any(ord(char) < 32 for char in self.query):
+            print("[ERROR] Search query contains unsupported control characters.")
+            return
+
+        params = urlencode({
+            "q": self.query,
+            "safe": "active"
+        })
+
+        url = f"https://www.google.com/search?{params}"
+
+        print("\n===== WEB SEARCH =====")
+        print("Open this link in your browser:")
+        print(url)
+        print("\n[INFO] No scraping or API key is used.")
