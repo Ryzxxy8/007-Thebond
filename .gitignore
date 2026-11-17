@@ -137,3 +137,6 @@ backup/ backups/ *.sqlite3 *.db
 # Private keys and credentials
 *.pem *.key secrets.json
 credentials.json
+
+# Local review backups
+*.review-backup

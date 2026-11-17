@@ -93,14 +93,44 @@ class EmailLookup:
 
             response.raise_for_status()
 
+            try:
+                data = response.json()
+            except ValueError:
+                print("[ERROR] Invalid JSON response.")
+                return None
+
+            if not isinstance(data, list):
+                print("[ERROR] Unexpected API response format.")
+                return None
+
             results = []
 
-            for breach in response.json():
+            for breach in data:
+                if not isinstance(breach, dict):
+                    continue
+
+                required = ["Title", "BreachDate", "PwnCount", "DataClasses"]
+
+                if not all(key in breach for key in required):
+                    print("[WARNING] Invalid breach record skipped.")
+                    continue
+
+                if not isinstance(breach["DataClasses"], list):
+                    continue
+
+                if (
+                    not isinstance(breach["PwnCount"], int)
+                    or isinstance(breach["PwnCount"], bool)
+                    or breach["PwnCount"] < 0
+                ):
+                    print("[WARNING] Invalid PwnCount skipped.")
+                    continue
+
                 results.append({
-                    "name": breach["Title"],
-                    "date": breach["BreachDate"],
+                    "name": str(breach["Title"]),
+                    "date": str(breach["BreachDate"]),
                     "pwncount": breach["PwnCount"],
-                    "types": ", ".join(breach["DataClasses"])
+                    "types": ", ".join(str(item) for item in breach["DataClasses"])
                 })
 
             return results
