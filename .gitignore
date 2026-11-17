@@ -119,3 +119,16 @@ cython_debug/
 
 # google cookies
 .google-cookie/
+# Local virtual environments
+.venv_backup/
+venv_backup/
+
+# Local backup files
+*.bak
+*.backup
+scripts_backup/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
